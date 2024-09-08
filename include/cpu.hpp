@@ -2,6 +2,7 @@
 #define CPU_HPP
 
 #include <cstdint>
+#include <algorithm>
 
 class CPU {
 public:
@@ -12,14 +13,14 @@ public:
      * 
      * The NES has 64KB of memory.
      */
-    static const uint16_t MEMORY_SIZE = 64 * 1024;
+    static const uint16_t MEMORY_SIZE;
 
     /**
      * Page Size
      * 
      * The NES has 256 bytes per page.
      */
-    static const uint8_t PAGE_SIZE = 256;
+    static const uint8_t PAGE_SIZE;
 
     /**
      * NMI Vector
@@ -28,7 +29,7 @@ public:
      * The NMI vector is a 16-bit address that points to the location of the NMI handler.
      * NMIs are used for critical system events that need to be handled immediately.
      */
-    static const uint16_t NMI_VECTOR = 0xFFFA;
+    static const uint16_t NMI_VECTOR;
 
     /**
      * Reset Vector
@@ -40,7 +41,7 @@ public:
      * Low byte: 0xFFFC
      * High byte: 0xFFFD
      */
-    static const uint16_t RESET_VECTOR = 0xFFFC;
+    static const uint16_t RESET_VECTOR;
 
     /**
      * IRQ Vector
@@ -49,20 +50,30 @@ public:
      * The IRQ vector is a 16-bit address that points to the location of the IRQ handler.
      * IRQs are used for non-critical system events that can be handled later.
      */
-    static const uint16_t IRQ_VECTOR = 0xFFFE;
+    static const uint16_t IRQ_VECTOR;
 
     // Important Memory Regions
-    static const uint16_t ZERO_PAGE_START = 0x0000;
-    static const uint16_t ZERO_PAGE_END = 0x00FF;
+    static const uint16_t ZERO_PAGE_START;
+    static const uint16_t ZERO_PAGE_END;
 
-    static const uint16_t STACK_START = 0x0100;
-    static const uint16_t STACK_END = 0x01FF;
+    static const uint16_t STACK_START;
+    static const uint16_t STACK_END;
 
-    static const uint16_t PPU_REGISTERS_START = 0x2000;
-    static const uint16_t PPU_REGISTERS_END = 0x2007;
+    static const uint16_t PPU_REGISTERS_START;
+    static const uint16_t PPU_REGISTERS_END;
 
-    static const uint16_t APU_IO_REGISTERS_START = 0x4000;
-    static const uint16_t APU_IO_REGISTERS_END = 0x4017;
+    static const uint16_t APU_IO_REGISTERS_START;
+    static const uint16_t APU_IO_REGISTERS_END;
+
+    // Flags
+    static const uint8_t CARRY_FLAG;
+    static const uint8_t ZERO_FLAG;
+    static const uint8_t INTERRUPT_DISABLE_FLAG;
+    static const uint8_t DECIMAL_MODE_FLAG;
+    static const uint8_t BREAK_FLAG;
+    static const uint8_t UNUSED_FLAG;
+    static const uint8_t OVERFLOW_FLAG;
+    static const uint8_t NEGATIVE_FLAG;
 
     /**
      * Accumulator
@@ -114,6 +125,7 @@ public:
 
     // Methods
     CPU(); // Constructor
+    ~CPU(); // Destructor
     void Reset(); // Resets the CPU to its initial state
     void Execute(); // Main loop to execute instructions
     void ExecuteInstruction(uint8_t opcode); // Execute a single instruction
@@ -123,17 +135,6 @@ public:
     void Write(uint16_t address, uint8_t value);
 
 private:
-
-    // Flags
-    static const uint8_t CARRY_FLAG = 0x01;
-    static const uint8_t ZERO_FLAG = 0x02;
-    static const uint8_t INTERRUPT_DISABLE_FLAG = 0x04;
-    static const uint8_t DECIMAL_MODE_FLAG = 0x08;
-    static const uint8_t BREAK_FLAG = 0x10;
-    static const uint8_t UNUSED_FLAG = 0x20;
-    static const uint8_t OVERFLOW_FLAG = 0x40;
-    static const uint8_t NEGATIVE_FLAG = 0x80;
-
     // Addressing modes
     enum class AddressingMode {
         Immediate,
